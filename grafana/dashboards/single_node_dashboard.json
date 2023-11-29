@@ -1504,7 +1504,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(clamp(app_monitoring_readyz{job=\"charon\"} == 1 OR app_monitoring_readyz{job=\"charon\"} == 4 OR app_monitoring_readyz{job=\"charon\"} == 5 OR app_monitoring_readyz{job=\"charon\"} == 6, 1, 1) OR on() vector(0))\n*\n(\n    (\n0.5 * (1.0 - 10*(sum(increase(app_eth2_errors_total{job=\"charon\"}[$__range])) / (sum(increase(app_eth2_latency_seconds_count{job=\"charon\"}[$__range]))))) OR on() vector(0.5)\n    )\n    +\n    (\n        0.5 * (1.0 - clamp_max(histogram_quantile(0.99, sum(rate(app_eth2_latency_seconds_bucket{job=\"charon\"}[$__range])) by (le)),1))\n    )\n)",
+          "expr": "(clamp(app_monitoring_readyz{job=\"charon\"} == 1 OR app_monitoring_readyz{job=\"charon\"} == 4 OR app_monitoring_readyz{job=\"charon\"} == 5 OR app_monitoring_readyz{job=\"charon\"} == 6, 1, 1) OR on() vector(0))\n*\non()\n(\n    (\n0.5 * (1.0 - 10*(sum(increase(app_eth2_errors_total{job=\"charon\"}[$__range])) / (sum(increase(app_eth2_latency_seconds_count{job=\"charon\"}[$__range]))))) OR on() vector(0.5)\n    )\n    +\n    (\n        0.5 * (1.0 - clamp_max(histogram_quantile(0.99, sum(rate(app_eth2_latency_seconds_bucket{job=\"charon\"}[$__range])) by (le)),1))\n    )\n)",
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
