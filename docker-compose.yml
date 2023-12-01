@@ -132,6 +132,7 @@ services:
       -addr=0.0.0.0:18550
       -relay-check
       -relays=${MEVBOOST_RELAYS:-"https://0xaa58208899c6105603b74396734a6263cc7d947f444f396a90f7b7d3e65d102aec7e5e5291b27e08d02c50a050825c2f@holesky.titanrelay.xyz,https://0xafa4c6985aa049fb79dd37010438cfebeb0f2bd42b115b89dd678dab0670c1de38da0c4e9138c9290a398ecd9a0b3110@boost-relay-holesky.flashbots.net"}
+    networks: [dvnode]
     restart: unless-stopped
 
   #                        _ _             _
