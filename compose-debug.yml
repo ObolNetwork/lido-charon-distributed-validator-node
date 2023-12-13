@@ -58,4 +58,6 @@ services:
       - LIDODVEXIT_LOKI_ADDRESSES=${CHARON_LOKI_ADDRESSES:-http://loki:3100/loki/api/v1/push}
 
 networks:
-  dvnode:
+  default:
+    name: ${CHARON_DOCKER_NETWORK:-lido-charon-distributed-validator-node_dvnode}
+    external: true
