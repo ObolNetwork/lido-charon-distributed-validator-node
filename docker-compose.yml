@@ -148,7 +148,7 @@ services:
     networks: [dvnode]
     volumes:
       - .charon/validator_keys:/opt/charon/validator_keys
-      - ./data/teku:/opt/data
+      - ./teku:/opt/data
     restart: unless-stopped
 
   #      _                     _
