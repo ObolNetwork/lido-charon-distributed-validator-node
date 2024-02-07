@@ -23,9 +23,9 @@ While the quick-start guide linked above is adequate for general-purpose deploym
     ```sh
     cp .env.sample.mainnet .env
     ```
-2. Grab your operator ID from the [lido dashboard](https://operators.lido.fi/).
-3. Find `VE_OPERATOR_ID` in `.env` and set it to your operator ID.
-4. Save and close `.env`.
+2. Grab your operator ID from the [lido dashboard](https://operators.lido.fi/)
+3. Find `VE_OPERATOR_ID` in `.env` and set it to your operator ID
+4. Save and close `.env`
 
 # FAQs
 
