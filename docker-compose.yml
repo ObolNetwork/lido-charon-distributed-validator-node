@@ -28,6 +28,8 @@ services:
       --JsonRpc.EnginePort=8551
       --JsonRpc.Host=0.0.0.0
       --JsonRpc.Port=8545
+      --Metrics.Enabled=true
+      --Metrics.ExposePort=6060
       --Sync.SnapSync=true
       --Sync.AncientBodiesBarrier=4367322
       --Sync.AncientReceiptsBarrier=4367322
