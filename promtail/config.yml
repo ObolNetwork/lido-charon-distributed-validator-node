@@ -33,5 +33,9 @@ scrape_configs:
         regex: '.*lighthouse.*'
         replacement: 'lido-lighthouse'
         target_label: 'job'
+      - target_label: 'cluster_name'
+        replacement: $CLUSTER_NAME
+      - target_label: 'cluster_peer'
+        replacement: $CLUSTER_PEER
     pipeline_stages:
       - docker: {}
