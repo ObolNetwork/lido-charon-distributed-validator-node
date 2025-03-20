@@ -45,7 +45,23 @@ done
 
 echo "Processed all keys imported=${IMPORTED_COUNT}, existing=${EXISTING_COUNT}, total=$(ls /home/charon/validator_keys/keystore-*.json | wc -l)"
 
-exec node /usr/app/packages/cli/bin/lodestar validator \
+
+if [ "$NETWORK" = "hoodi" ]; then
+    exec node /usr/app/packages/cli/bin/lodestar validator \
+    --dataDir="$DATA_DIR" \
+    --keystoresDir="$KEYSTORES_DIR" \
+    --secretsDir="$SECRETS_DIR" \
+    --network="$NETWORK" \
+    --metrics=true \
+    --metrics.address="0.0.0.0" \
+    --metrics.port=5064 \
+    --beaconNodes="$BEACON_NODE_ADDRESS" \
+    --builder="$BUILDER_API_ENABLED" \
+    --builder.selection="$BUILDER_SELECTION" \
+    --paramsFile="/opt/lodestar/hoodi-config.yaml" \
+    --distributed
+else
+    exec node /usr/app/packages/cli/bin/lodestar validator \
     --dataDir="$DATA_DIR" \
     --keystoresDir="$KEYSTORES_DIR" \
     --secretsDir="$SECRETS_DIR" \
@@ -57,3 +73,4 @@ exec node /usr/app/packages/cli/bin/lodestar validator \
     --builder="$BUILDER_API_ENABLED" \
     --builder.selection="$BUILDER_SELECTION" \
     --distributed
+fi

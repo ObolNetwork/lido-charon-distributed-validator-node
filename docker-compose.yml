@@ -130,6 +130,7 @@ services:
       - "promtail-monitored=${LODESTAR_PROMTAIL_MONITORED:-true}"
     volumes:
       - ./lodestar/run.sh:/opt/lodestar/run.sh
+      - ./lodestar/hoodi-config.yaml:/opt/lodestar/hoodi-config.yaml
       - .charon/validator_keys:/home/charon/validator_keys
       - ./data/lodestar:/opt/data
     restart: unless-stopped
