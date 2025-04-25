@@ -193,7 +193,7 @@ services:
     restart: unless-stopped
 
   node-exporter:
-    image: prom/node-exporter:${NODE_EXPORTER_VERSION:-1.9.0}
+    image: quay.io/prometheus/node-exporter:${NODE_EXPORTER_VERSION:-1.9.0}
     user: ":"
     networks: [dvnode]
     ports:
