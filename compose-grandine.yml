@@ -29,7 +29,7 @@ services:
     ports:
       - 9000:9000     # TCP + UDP LibP2P
     volumes:
-      - ./data/grandine:/data
+      - ./data/grandine:/root/.grandine
       - ./jwt:/jwt:ro
     networks:
       - dvnode
