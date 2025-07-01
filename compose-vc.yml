@@ -1,0 +1,29 @@
+# Override any defaults specified by `${FOO:-bar}` in `.env` with `FOO=qux`.
+# ${VARIABLE:-default} evaluates to default if VARIABLE is unset or empty in the environment.
+# ${VARIABLE-default} evaluates to default only if VARIABLE is unset in the environment.
+
+services:
+  #  _           _           _
+  # | | ___   __| | ___  ___| |_ __ _ _ __
+  # | |/ _ \ / _` |/ _ \/ __| __/ _` | '__|
+  # | | (_) | (_| |  __/\__ \ || (_| | |
+  # |_|\___/ \__,_|\___||___/\__\__,_|_|
+
+  vc-lodestar:
+    profiles: [vc_lodestar]
+    image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.29.0}
+    depends_on: [dv-charon]
+    entrypoint: /opt/lodestar/run.sh
+    networks: [dvnode]
+    environment:
+      BEACON_NODE_ADDRESS: http://dv-${DV}:3600
+      NETWORK: ${NETWORK}
+      BUILDER_API_ENABLED: ${BUILDER_API_ENABLED:-true}
+      BUILDER_SELECTION: ${BUILDER_SELECTION:-builderalways}
+    labels:
+      - "promtail-monitored=${LODESTAR_PROMTAIL_MONITORED:-true}"
+    volumes:
+      - ./lodestar/run.sh:/opt/lodestar/run.sh
+      - .charon/validator_keys:/home/charon/validator_keys
+      - ./data/lodestar:/opt/data
+    restart: unless-stopped
