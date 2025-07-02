@@ -25,5 +25,5 @@ services:
     volumes:
       - ./lodestar/run.sh:/opt/lodestar/run.sh
       - .charon/validator_keys:/home/charon/validator_keys
-      - ./data/vc/lodestar:/opt/data
+      - ./data/lodestar:/opt/data # Keep data in lodestar and not vc-lodestar for backwards compatibility
     restart: unless-stopped

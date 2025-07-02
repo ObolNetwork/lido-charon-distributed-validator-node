@@ -37,5 +37,5 @@ services:
       --Sync.AncientReceiptsBarrier=4367322
     networks: [dvnode]
     volumes:
-      - ./data/el-nethermind:/nethermind/data
+      - ./data/nethermind:/nethermind/data
       - ./jwt:/root/jwt
