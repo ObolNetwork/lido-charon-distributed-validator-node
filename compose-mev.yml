@@ -10,17 +10,17 @@ services:
   #  |_| |_| |_|\___| \_/      |_.__/ \___/ \___/|___/\__|
   mev-mevboost:
     profiles: [mev-mevboost]
-    image: ${MEVBOOST_IMAGE:-flashbots/mev-boost}:${MEVBOOST_VERSION:-1.9}
+    image: flashbots/mev-boost:${MEV_MEVBOOST_VERSION:-1.9}
     command: |
       -${NETWORK}
       -loglevel=debug
       -addr=0.0.0.0:18550
       -relay-check
-      -relays=${MEVBOOST_RELAYS}
-      -request-timeout-getheader=${MEVBOOST_TIMEOUT_GETHEADER:-950}
-      -request-timeout-getpayload=${MEVBOOST_TIMEOUT_GETPAYLOAD:-4000}
-      -request-timeout-regval=${MEVBOOST_TIMEOUT_REGVAL:-3000}
+      -relays=${MEV_RELAYS}
+      -request-timeout-getheader=${MEV_TIMEOUT_GETHEADER:-950}
+      -request-timeout-getpayload=${MEV_TIMEOUT_GETPAYLOAD:-4000}
+      -request-timeout-regval=${MEV_TIMEOUT_REGVAL:-3000}
     labels:
-      - "promtail-monitored=${MEV_BOOST_PROMTAIL_MONITORED:-true}"
+      - "promtail-monitored=${MEV_MEV_BOOST_PROMTAIL_MONITORED:-true}"
     networks: [dvnode]
     restart: unless-stopped
