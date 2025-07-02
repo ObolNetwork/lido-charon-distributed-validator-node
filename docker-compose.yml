@@ -11,7 +11,7 @@ services:
 
   dv-charon:
     profiles: [dv_charon]
-    image: obolnetwork/charon:${CHARON_VERSION:-v1.5.0-rc4}
+    image: obolnetwork/charon:${CHARON_VERSION:-v1.5.0}
     environment:
       - CHARON_BEACON_NODE_ENDPOINTS=${CHARON_BEACON_NODE_ENDPOINTS:-http://cl-${CL}:5052}
       - CHARON_BEACON_NODE_HEADERS=${CHARON_BEACON_NODE_HEADERS:-}
