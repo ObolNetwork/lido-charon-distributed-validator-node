@@ -11,15 +11,15 @@ services:
 
   el-nethermind:
     profiles: [el-nethermind]
-    image: nethermind/nethermind:${NETHERMIND_VERSION:-1.32.2}
+    image: nethermind/nethermind:${EL_NETHERMIND_VERSION:-1.32.2}
     restart: unless-stopped
     ports:
-      - ${NETHERMIND_PORT_P2P:-30303}:30303/tcp # P2P TCP
-      - ${NETHERMIND_PORT_P2P:-30303}:30303/udp # P2P UDP
-      - ${NETHERMIND_IP_HTTP:-127.0.0.1}:${NETHERMIND_PORT_HTTP:-8545}:8545 # JSON-RPC
-      - ${NETHERMIND_IP_ENGINE:-127.0.0.1}:${NETHERMIND_PORT_ENGINE:-8551}:8551 # ENGINE-API
+      - ${EL_PORT_P2P:-30303}:30303/tcp # P2P TCP
+      - ${EL_PORT_P2P:-30303}:30303/udp # P2P UDP
+      - ${EL_IP_HTTP:-127.0.0.1}:${EL_PORT_HTTP:-8545}:8545 # JSON-RPC
+      - ${EL_IP_ENGINE:-127.0.0.1}:${EL_PORT_ENGINE:-8551}:8551 # ENGINE-API
     labels:
-      - "promtail-monitored=${NETHERMIND_PROMTAIL_MONITORED:-true}"
+      - "promtail-monitored=${EL_NETHERMIND_PROMTAIL_MONITORED:-true}"
     command: |
       --config=${NETWORK}
       --datadir=data
@@ -37,5 +37,5 @@ services:
       --Sync.AncientReceiptsBarrier=4367322
     networks: [dvnode]
     volumes:
-      - ./data/nethermind:/nethermind/data
+      - ./data/el-nethermind:/nethermind/data
       - ./jwt:/root/jwt

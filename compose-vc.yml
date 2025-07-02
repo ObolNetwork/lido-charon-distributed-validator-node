@@ -11,19 +11,19 @@ services:
 
   vc-lodestar:
     profiles: [vc-lodestar]
-    image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.29.0}
+    image: chainsafe/lodestar:${VC_LODESTAR_VERSION:-v1.29.0}
     depends_on: [charon]
     entrypoint: /opt/lodestar/run.sh
     networks: [dvnode]
     environment:
-      BEACON_NODE_ADDRESS: http://${DV}:3600
+      BEACON_NODE_ADDRESS: http://charon:3600
       NETWORK: ${NETWORK}
       BUILDER_API_ENABLED: ${BUILDER_API_ENABLED:-true}
-      BUILDER_SELECTION: ${BUILDER_SELECTION:-builderalways}
+      BUILDER_SELECTION: ${VC_LODESTAR_BUILDER_SELECTION:-builderalways}
     labels:
-      - "promtail-monitored=${LODESTAR_PROMTAIL_MONITORED:-true}"
+      - "promtail-monitored=${VC_LODESTAR_PROMTAIL_MONITORED:-true}"
     volumes:
       - ./lodestar/run.sh:/opt/lodestar/run.sh
       - .charon/validator_keys:/home/charon/validator_keys
-      - ./data/lodestar:/opt/data
+      - ./data/vc/lodestar:/opt/data
     restart: unless-stopped
