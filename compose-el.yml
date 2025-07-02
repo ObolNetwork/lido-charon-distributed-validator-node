@@ -10,7 +10,7 @@ services:
   # |_| |_|\___|\__|_| |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|
 
   el-nethermind:
-    profiles: [el_nethermind]
+    profiles: [el-nethermind]
     image: nethermind/nethermind:${NETHERMIND_VERSION:-1.32.2}
     restart: unless-stopped
     ports:

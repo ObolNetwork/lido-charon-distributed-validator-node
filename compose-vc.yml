@@ -10,13 +10,13 @@ services:
   # |_|\___/ \__,_|\___||___/\__\__,_|_|
 
   vc-lodestar:
-    profiles: [vc_lodestar]
+    profiles: [vc-lodestar]
     image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.29.0}
-    depends_on: [dv-charon]
+    depends_on: [charon]
     entrypoint: /opt/lodestar/run.sh
     networks: [dvnode]
     environment:
-      BEACON_NODE_ADDRESS: http://dv-${DV}:3600
+      BEACON_NODE_ADDRESS: http://${DV}:3600
       NETWORK: ${NETWORK}
       BUILDER_API_ENABLED: ${BUILDER_API_ENABLED:-true}
       BUILDER_SELECTION: ${BUILDER_SELECTION:-builderalways}

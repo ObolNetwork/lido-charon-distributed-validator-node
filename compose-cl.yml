@@ -11,12 +11,12 @@ services:
   #  |___/
 
   cl-grandine:
-    profiles: [cl_grandine]
+    profiles: [cl-grandine]
     image: sifrai/grandine:${GRANDINE_VERSION:-1.1.1}
     restart: unless-stopped
     command:
       - --datadir=/root/.grandine
-      - --eth1-rpc-urls=http://el-${EL}:8551
+      - --eth1-rpc-urls=http://${EL}:8551
       - --jwt-secret=/jwt
       - --http-address=0.0.0.0
       - --http-port=5052
@@ -25,7 +25,7 @@ services:
       - --metrics-port=5054
       - --metrics-address=0.0.0.0
       - --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
-      - --builder=http://mev-${MEV}:18550
+      - --builder=http://${MEV}:18550
     ports:
       - 9000:9000 # TCP + UDP LibP2P
     volumes:
@@ -42,7 +42,7 @@ services:
   #      |___/
 
   cl-lighthouse:
-    profiles: [cl_lighthouse]
+    profiles: [cl-lighthouse]
     image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-v7.0.1}
     ports:
       - ${LIGHTHOUSE_PORT_P2P:-9000}:9000/tcp # P2P TCP
@@ -54,10 +54,10 @@ services:
       --network=${NETWORK}
       --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
       --checkpoint-sync-url-timeout=600
-      --execution-endpoint=http://el-${EL}:8551
+      --execution-endpoint=http://${EL}:8551
       --execution-jwt=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
-      --builder=http://mev-${MEV}:18550
+      --builder=http://${MEV}:18550
       --http
       --http-address=0.0.0.0
       --http-port=5052
