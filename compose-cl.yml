@@ -26,7 +26,7 @@ services:
       - --metrics
       - --metrics-port=5054
       - --metrics-address=0.0.0.0
-      - --checkpoint-sync-url=${CL_CHECKPOINT_SYNC_URL}
+      - --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
       - --builder-url=http://${MEV}:18550
     ports:
       - ${CL_PORT_P2P:-9000}:9000 # P2P TCP+UDP
@@ -51,7 +51,7 @@ services:
     command: |
       lighthouse bn
       --network=${NETWORK}
-      --checkpoint-sync-url=${CL_CHECKPOINT_SYNC_URL}
+      --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
       --checkpoint-sync-url-timeout=600
       --execution-endpoint=http://${EL}:8551
       --execution-jwt=/opt/jwt/jwt.hex
