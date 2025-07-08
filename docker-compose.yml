@@ -211,26 +211,26 @@ services:
   #   \_/ \__,_|_|_|\__,_|\__,_|\__\___/|_|        \___|/ |\___|\___|\__\___/|_|
   #                                                   |__/
 
-  # validator-ejector:
-  #   image: lidofinance/validator-ejector:${VALIDATOR_EJECTOR_VERSION:-1.7.0}
-  #   user: ":"
-  #   networks: [dvnode]
-  #   volumes:
-  #     - ./validator-ejector:/exitmessages
-  #   labels:
-  #     - "promtail-monitored=${EJECTOR_PROMTAIL_MONITORED:-true}"
-  #   restart: unless-stopped
-  #   environment:
-  #     - EXECUTION_NODE=${VE_EXECUTION_NODE_URL:-http://nethermind:8545}
-  #     - CONSENSUS_NODE=${VE_BEACON_NODE_URL:-http://lighthouse:5052}
-  #     - LOCATOR_ADDRESS=${VE_LOCATOR_ADDRESS}
-  #     - STAKING_MODULE_ID=${VE_STAKING_MODULE_ID:-2}
-  #     - OPERATOR_ID=${VE_OPERATOR_ID}
-  #     - ORACLE_ADDRESSES_ALLOWLIST=${VE_ORACLE_ADDRESSES_ALLOWLIST}
-  #     - MESSAGES_LOCATION=/exitmessages
-  #     - RUN_METRICS=true
-  #     - HTTP_PORT=8989
-  #     - DISABLE_SECURITY_DONT_USE_IN_PRODUCTION=${DISABLE_EJECTOR_SECURITY:-false}
+  validator-ejector:
+    image: lidofinance/validator-ejector:${VALIDATOR_EJECTOR_VERSION:-1.7.0}
+    user: ":"
+    networks: [dvnode]
+    volumes:
+      - ./validator-ejector:/exitmessages
+    labels:
+      - "promtail-monitored=${EJECTOR_PROMTAIL_MONITORED:-true}"
+    restart: unless-stopped
+    environment:
+      - EXECUTION_NODE=${VE_EXECUTION_NODE_URL:-http://nethermind:8545}
+      - CONSENSUS_NODE=${VE_BEACON_NODE_URL:-http://lighthouse:5052}
+      - LOCATOR_ADDRESS=${VE_LOCATOR_ADDRESS}
+      - STAKING_MODULE_ID=${VE_STAKING_MODULE_ID:-2}
+      - OPERATOR_ID=${VE_OPERATOR_ID}
+      - ORACLE_ADDRESSES_ALLOWLIST=${VE_ORACLE_ADDRESSES_ALLOWLIST}
+      - MESSAGES_LOCATION=/exitmessages
+      - RUN_METRICS=true
+      - HTTP_PORT=8989
+      - DISABLE_SECURITY_DONT_USE_IN_PRODUCTION=${DISABLE_EJECTOR_SECURITY:-false}
 
   #  _ _     _                 _                      _ _
   # | (_) __| | ___         __| |_   __      _____  _(_) |_
