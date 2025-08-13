@@ -15,3 +15,11 @@ data/
 teku/validator/
 # Teku directory for storing logs
 teku/logs/
+
+# Cluster data and keys
+**/canary-*/
+**/node[0-9]*/
+**/validator_keys/
+**/keystore-*.json
+**/keystore-*.txt
+**/charon-enr-private-key
