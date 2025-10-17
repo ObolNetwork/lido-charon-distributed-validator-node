@@ -155,7 +155,7 @@ services:
       -loglevel=debug
       -addr=0.0.0.0:18550
       -relay-check
-      -relays=${MEVBOOST_RELAYS}
+      -relays=${MEV_RELAYS}
       -request-timeout-getheader=${MEVBOOST_TIMEOUT_GETHEADER:-600}
       -request-timeout-getpayload=${MEVBOOST_TIMEOUT_GETPAYLOAD:-4000}
       -request-timeout-regval=${MEVBOOST_TIMEOUT_REGVAL:-3000}
