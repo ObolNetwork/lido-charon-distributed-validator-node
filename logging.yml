@@ -1,6 +1,7 @@
 services:
 
   promtail:
+    profiles: [logging-promtail]
     image: grafana/promtail:${PROMTAIL_VERSION:-2.8.2}
     environment:
       CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES}
