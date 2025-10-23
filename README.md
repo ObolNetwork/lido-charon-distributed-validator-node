@@ -58,7 +58,7 @@ To configure this repo for a particular network, follow these instructions. If y
 7. Save and close the `.env` file.
 
 > [!IMPORTANT]  
-> You will need a `.charon/` folder from a completed DKG present to complete the setup of this repo.
+> You will need a `.charon/` folder from a completed DKG ceremony present in this repo to complete the remaining setup of the node.
 
 Finally, to run the node run the following command.
 
