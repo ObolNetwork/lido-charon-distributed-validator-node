@@ -16,3 +16,4 @@ teku/validator/
 # Teku directory for storing logs
 teku/logs/
 commit-boost/config.toml
+prometheus/prometheus.yml
