@@ -47,6 +47,7 @@ services:
     restart: unless-stopped
 
   alloy:
+    profiles: [monitoring-log-collector]
     image: grafana/alloy:${ALLOY_VERSION:-v1.11.3}
     environment:
       CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES}
