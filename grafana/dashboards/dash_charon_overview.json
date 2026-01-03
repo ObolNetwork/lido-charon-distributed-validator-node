@@ -443,6 +443,11 @@
                         "color": "purple",
                         "index": 3,
                         "text": "Gnosis"
+                      },
+                      "5": {
+                        "color": "purple",
+                        "index": 4,
+                        "text": "Hoodi"
                       }
                     },
                     "type": "value"
@@ -489,7 +494,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "( 1 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"mainnet\"} )\nor \n( 2 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"goerli\"} )\nor\n( 3 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"sepolia\"} )\nor\n( 4 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"gnosis\"} )",
+          "expr": "( 1 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"mainnet\"} )\nor \n( 2 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"goerli\"} )\nor\n( 3 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"sepolia\"} )\nor\n( 4 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"gnosis\"} )\nor\n( 5 * app_version{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\", cluster_network=\"hoodi\"} )",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -6856,9 +6861,14 @@
             "selected": false,
             "text": "gnosis",
             "value": "gnosis"
+          },
+          {
+            "selected": false,
+            "text": "hoodi",
+            "value": "hoodi"
           }
         ],
-        "query": "mainnet,goerli,holesky,sepolia,gnosis",
+        "query": "mainnet,goerli,holesky,sepolia,gnosis,hoodi",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
