@@ -24,6 +24,9 @@ scrape_configs:
     relabel_configs:
       - target_label: alert_discord_ids
         replacement: "$ALERT_DISCORD_IDS"
+  - job_name: "mev-boost"
+    static_configs:
+      - targets: ["mev-mevboost:18551"]
   - job_name: "lodestar"
     static_configs:
       - targets: [ "lodestar:5064" ]
