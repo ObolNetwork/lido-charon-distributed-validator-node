@@ -26,7 +26,10 @@ scrape_configs:
         replacement: "$ALERT_DISCORD_IDS"
   - job_name: "mev-boost"
     static_configs:
-      - targets: ["mev-mevboost:18551"]
+      - targets: ["mev-mevboost:18551","mev-boost:18551"]
+    relabel_configs:
+      - target_label: operator_id
+        replacement: "$OPERATOR_PROMETHEUS_LABEL"
   - job_name: "lodestar"
     static_configs:
       - targets: [ "lodestar:5064" ]
