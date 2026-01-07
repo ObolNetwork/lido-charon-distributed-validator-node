@@ -160,6 +160,8 @@ services:
       -request-timeout-getheader=${MEVBOOST_TIMEOUT_GETHEADER:-900}
       -request-timeout-getpayload=${MEVBOOST_TIMEOUT_GETPAYLOAD:-4000}
       -request-timeout-regval=${MEVBOOST_TIMEOUT_REGVAL:-3000}
+      -metrics
+      -metrics-addr=0.0.0.0:18551
     labels:
       - "promtail-monitored=${MEV_BOOST_PROMTAIL_MONITORED:-true}"
     networks: [dvnode]
