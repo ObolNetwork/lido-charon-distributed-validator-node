@@ -2,8 +2,11 @@
 
 if [ -z "$SERVICE_OWNER" ]
 then
-  echo "\$SERVICE_OWNER variable is empty" >&2
-  exit 1
+  if [ -f /opt/charon/.charon/cluster-lock.json ]; then
+    export SERVICE_OWNER=$(cat /opt/charon/.charon/cluster-lock.json | jq -r '.lock_hash[2:9]')
+  else
+    export SERVICE_OWNER="unknown"
+  fi
 fi
 
 if [ -z "$PROM_REMOTE_WRITE_TOKEN" ]
