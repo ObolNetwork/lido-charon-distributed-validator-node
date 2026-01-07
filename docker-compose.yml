@@ -183,10 +183,11 @@ services:
       PROM_REMOTE_WRITE_TOKEN: ${PROM_REMOTE_WRITE_TOKEN}
       SERVICE_OWNER: ${SERVICE_OWNER}
       ALERT_DISCORD_IDS: "${ALERT_DISCORD_IDS}"
+      CLUSTER_NAME: ${CLUSTER_NAME}
+      CLUSTER_PEER: ${CLUSTER_PEER}
     volumes:
       - ./prometheus:/etc/prometheus
       - ./data/prometheus:/prometheus
-      - ./.charon/cluster-lock.json:/opt/charon/.charon/cluster-lock.json:ro
     entrypoint: /etc/prometheus/run.sh
     restart: unless-stopped
 

@@ -30,8 +30,10 @@ scrape_configs:
     static_configs:
       - targets: ["mev-mevboost:18551","mev-boost:18551"]
     relabel_configs:
-      - target_label: operator_id
-        replacement: "$OPERATOR_PROMETHEUS_LABEL"
+      - target_label: cluster_name
+        replacement: "$CLUSTER_NAME"
+      - target_label: cluster_peer
+        replacement: "$CLUSTER_PEER"
   - job_name: "lodestar"
     static_configs:
       - targets: [ "lodestar:5064" ]
