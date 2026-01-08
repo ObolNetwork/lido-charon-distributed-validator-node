@@ -53,7 +53,7 @@ To configure this repo for a particular network, follow these instructions. If y
 2. Grab your operator ID from the lido [mainnet dashboard](https://operators.lido.fi/) or [testnet dashboard](https://operators-holesky.testnet.fi/).
 3. Find `VE_OPERATOR_ID` in `.env` and set it to your operator ID.
 4. Find `VE_EASY_TRACK_MOTION_CREATOR_ADDRESSES_ALLOWLIST=["0xYourNodeOperatorRewardAddress"]`, uncomment it, and change `0xYourNodeOperatorRewardAddress` to your Lido Operator SAFE manager address for your cluster.
-5. To enable log collection with promtail which will stream logs to the Obol Core team to help identify cluster issues find `MONITORING=${MONITORING:-monitoring},monitoring-log-collector` and uncomment it.
+5. To enable log collection with alloy which will stream logs to the Obol Core team to help identify cluster issues find `MONITORING=${MONITORING:-monitoring},monitoring-log-collector` and uncomment it.
 6. Consult with the others in your cluster, and choose a set of execution layer (EL), consensus layer (CL), validator client (VC) and mev clients (MEV) for your setup that maximises the client diversity of your cluster; by commenting and uncommenting one of each in the opening lines of your `.env` file.
 7. Save and close the `.env` file.
 
