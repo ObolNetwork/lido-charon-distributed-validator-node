@@ -58,7 +58,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks: [dvnode]
     entrypoint: /etc/alloy/run.sh
-    command: ["/bin/alloy", "run", "/etc/alloy/config.alloy", "--storage.path=/var/lib/alloy/data"]
+    command:
+      [
+        "/bin/alloy",
+        "run",
+        "/etc/alloy/config.alloy",
+        "--storage.path=/var/lib/alloy/data",
+      ]
     restart: unless-stopped
 
 networks:
