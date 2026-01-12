@@ -20,6 +20,9 @@ scrape_configs:
   - job_name: "lighthouse"
     static_configs:
       - targets: ["lighthouse:5054"]
+  - job_name: "cl-prysm"
+    static_configs:
+      - targets: ["cl-prysm:5054"]
   - job_name: "charon"
     static_configs:
       - targets: ["charon:3620"]

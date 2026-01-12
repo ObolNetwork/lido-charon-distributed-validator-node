@@ -207,7 +207,6 @@ services:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
       - ./grafana/dashboards:/etc/dashboards
       - ./data/grafana:/var/lib/grafana
-    entrypoint: /etc/prometheus/run.sh
     restart: unless-stopped
 
   loki:

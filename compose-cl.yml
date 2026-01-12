@@ -139,3 +139,39 @@ services:
       - ./data/cl-lodestar:/opt/lodestar/data
       - ./jwt:/jwt:ro
     networks: [dvnode]
+
+  #
+  #  _ __  _ __ _   _ ___ _ __ ___
+  # | '_ \| '__| | | / __| '_ ` _ \
+  # | |_) | |  | |_| \__ \ | | | | |
+  # | .__/|_|   \__, |___/_| |_| |_|
+  # |_|         |___/
+
+  cl-prysm:
+    profiles: [cl-prysm]
+    image: prysmaticlabs/prysm-beacon-chain:${CL_PRYSM_VERSION:-v7.1.2}
+    restart: unless-stopped
+    labels:
+      - "alloy-monitored=${CL_PRYSM_ALLOY_MONITORED:-true}"
+    command:
+      - --accept-terms-of-use
+      - --${NETWORK}
+      - --datadir=/data
+      - --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
+      - --genesis-beacon-api-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
+      - --execution-endpoint=http://${EL}:8551
+      - --jwt-secret=/jwt/jwt.hex
+      - --http-mev-relay=http://${MEV}:18550
+      - --http-host=0.0.0.0
+      - --http-port=5052
+      - --disable-monitoring=false
+      - --monitoring-host=0.0.0.0
+      - --monitoring-port=5054
+      - --suggested-fee-recipient=${LIDO_EXECUTION_LAYER_REWARDS_ADDRESS:-0x388C818CA8B9251b393131C08a736A67ccB19297}
+    ports:
+      - ${CL_PORT_P2P:-9000}:13000/tcp # P2P TCP
+      - ${CL_PORT_P2P:-9000}:12000/udp # P2P UDP
+    volumes:
+      - ./data/cl-prysm:/data
+      - ./jwt:/jwt:ro
+    networks: [dvnode]
