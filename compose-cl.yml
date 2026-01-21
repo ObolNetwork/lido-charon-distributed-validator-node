@@ -29,6 +29,7 @@ services:
       - --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
       - --builder-url=http://${MEV}:18550
       - --max-empty-slots=4096
+      - --target-peers=${CL_TARGET_PEERS:-80}
     ports:
       - ${CL_PORT_P2P:-9000}:9000 # P2P TCP+UDP
     volumes:
@@ -66,6 +67,7 @@ services:
       --metrics-port=5054
       --metrics-allow-origin="*"
       --suggested-fee-recipient=${LIDO_EXECUTION_LAYER_REWARDS_ADDRESS:-0x388C818CA8B9251b393131C08a736A67ccB19297}
+      --target-peers=${CL_TARGET_PEERS:-200}
     ports:
       - ${CL_PORT_P2P:-9000}:9000/tcp # P2P TCP
       - ${CL_PORT_P2P:-9000}:9000/udp # P2P UDP
@@ -102,6 +104,7 @@ services:
       --metrics-port=5054
       --metrics-host-allowlist="*"
       --validators-proposer-default-fee-recipient=${LIDO_EXECUTION_LAYER_REWARDS_ADDRESS:-0x388C818CA8B9251b393131C08a736A67ccB19297}
+      --p2p-peer-upper-bound=${CL_TARGET_PEERS:-100}
     volumes:
       - ./data/cl-teku:/opt/teku/data
       - ./jwt:/jwt:ro
@@ -135,6 +138,7 @@ services:
       --metrics.address=0.0.0.0
       --metrics.port=5054
       --suggestedFeeRecipient=${LIDO_EXECUTION_LAYER_REWARDS_ADDRESS:-0x388C818CA8B9251b393131C08a736A67ccB19297}
+      --targetPeers=${CL_TARGET_PEERS:-200}
     volumes:
       - ./data/cl-lodestar:/opt/lodestar/data
       - ./jwt:/jwt:ro
@@ -168,6 +172,7 @@ services:
       - --monitoring-host=0.0.0.0
       - --monitoring-port=5054
       - --suggested-fee-recipient=${LIDO_EXECUTION_LAYER_REWARDS_ADDRESS:-0x388C818CA8B9251b393131C08a736A67ccB19297}
+      - --p2p-max-peers=${CL_TARGET_PEERS:-70}
     ports:
       - ${CL_PORT_P2P:-9000}:13000/tcp # P2P TCP
       - ${CL_PORT_P2P:-9000}:12000/udp # P2P UDP
