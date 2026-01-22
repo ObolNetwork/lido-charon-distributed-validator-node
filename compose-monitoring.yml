@@ -50,9 +50,9 @@ services:
     profiles: [monitoring-log-collector]
     image: grafana/alloy:${ALLOY_VERSION:-v1.11.3}
     environment:
-      CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES}
-      CLUSTER_NAME: ${CLUSTER_NAME}
-      CLUSTER_PEER: ${CLUSTER_PEER}
+      CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES:-}
+      CLUSTER_NAME: ${CLUSTER_NAME:-}
+      CLUSTER_PEER: ${CLUSTER_PEER:-}
     volumes:
       - ./alloy:/etc/alloy
       - /var/run/docker.sock:/var/run/docker.sock
