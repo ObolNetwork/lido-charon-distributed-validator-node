@@ -5,7 +5,14 @@ discovery.docker "docker" {
 loki.process "docker" {
 	forward_to = [loki.write.default.receiver]
 
-	stage.docker { }
+	// 1. First, parse the Docker log format to extract the timestamp
+    stage.docker { }
+
+    // 2. Then, drop anything older than 5 days
+    stage.drop {
+        older_than          = "120h" // 5 days
+        drop_counter_reason = "old_logs_rejected"
+    }
 }
 
 discovery.relabel "docker" {
