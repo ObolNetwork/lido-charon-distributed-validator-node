@@ -46,7 +46,7 @@ services:
 
   cl-lighthouse:
     profiles: [cl-lighthouse]
-    image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-v8.0.1}
+    image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-v8.1.0}
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LIGHTHOUSE_ALLOY_MONITORED:-true}"
@@ -118,7 +118,7 @@ services:
 
   cl-lodestar:
     profiles: [cl-lodestar]
-    image: chainsafe/lodestar:${VC_VERSION:-v1.38.0}
+    image: chainsafe/lodestar:${VC_VERSION:-v1.39.1}
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LODESTAR_ALLOY_MONITORED:-true}"
