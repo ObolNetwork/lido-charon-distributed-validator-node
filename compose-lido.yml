@@ -1,0 +1,47 @@
+# compose-lido.yml
+services:
+  validator-ejector:
+    profiles: [lido-ejector]
+    image: lidofinance/validator-ejector:${VALIDATOR_EJECTOR_VERSION:-1.9.0}
+    user: ":"
+    networks: [dvnode]
+    volumes:
+      - ./validator-ejector:/exitmessages
+    labels:
+      - "alloy-monitored=${EJECTOR_ALLOY_MONITORED:-true}"
+    restart: unless-stopped
+    environment:
+      - EXECUTION_NODE=${VE_EXECUTION_NODE_URL:-http://nethermind:8545}
+      - CONSENSUS_NODE=${VE_BEACON_NODE_URL:-http://lighthouse:5052}
+      - LOCATOR_ADDRESS=${VE_LOCATOR_ADDRESS}
+      - STAKING_MODULE_ID=${VE_STAKING_MODULE_ID:-2}
+      - OPERATOR_ID=${VE_OPERATOR_ID}
+      - ORACLE_ADDRESSES_ALLOWLIST=${VE_ORACLE_ADDRESSES_ALLOWLIST}
+      - EASY_TRACK_ADDRESS=${VE_EASY_TRACK_ADDRESS}
+      - EASY_TRACK_MOTION_CREATOR_ADDRESSES_ALLOWLIST=${VE_EASY_TRACK_MOTION_CREATOR_ADDRESSES_ALLOWLIST:-[]}
+      - MESSAGES_LOCATION=/exitmessages
+      - RUN_METRICS=true
+      - HTTP_PORT=8989
+      - DISABLE_SECURITY_DONT_USE_IN_PRODUCTION=${DISABLE_EJECTOR_SECURITY:-false}
+
+  lido-dv-exit:
+    profiles: [lido-dv-exit]
+    image: obolnetwork/lido-dv-exit:${LIDO_DV_EXIT_VERSION:-v0.4.0}
+    user: ":"
+    networks: [dvnode]
+    volumes:
+      - ./validator-ejector:/exitmessages
+      - .charon:/charon
+    labels:
+      - "alloy-monitored=${DV_EXIT_ALLOY_MONITORED:-true}"
+    environment:
+      - LIDODVEXIT_BEACON_NODE_URL=${LIDO_DV_EXIT_BEACON_NODE_URL:-http://lighthouse:5052}
+      - LIDODVEXIT_CHARON_RUNTIME_DIR=/charon
+      - LIDODVEXIT_EJECTOR_EXIT_PATH=/exitmessages
+      - LIDODVEXIT_EXIT_EPOCH=${LIDODVEXIT_EXIT_EPOCH:-256}
+      - LIDODVEXIT_LOG_LEVEL=${LIDO_DV_EXIT_LOG_LEVEL:-info}
+      - LIDODVEXIT_VALIDATOR_QUERY_CHUNK_SIZE=${LIDO_DV_EXIT_VALIDATOR_QUERY_CHUNK_SIZE:-5}
+    restart: unless-stopped
+
+networks:
+  dvnode:
