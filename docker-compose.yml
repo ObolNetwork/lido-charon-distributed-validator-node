@@ -231,7 +231,7 @@ services:
   #                                                   |__/
 
   validator-ejector:
-    profiles: [lido-ejector]
+    profiles: [""]
     image: lidofinance/validator-ejector:${VALIDATOR_EJECTOR_VERSION:-1.9.0}
     user: ":"
     networks: [dvnode]
@@ -261,7 +261,7 @@ services:
   # |_|_|\__,_|\___/       \__,_| \_/       \___/_/\_\_|\__|
 
   lido-dv-exit:
-    profiles: [lido-dv-exit]
+    profiles: [""]
     image: obolnetwork/lido-dv-exit:${LIDO_DV_EXIT_VERSION:-v0.4.0}
     user: ":"
     networks: [dvnode]
