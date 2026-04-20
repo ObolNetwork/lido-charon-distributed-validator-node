@@ -198,7 +198,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:${GRAFANA_VERSION:-12.4.1}
+    image: grafana/grafana:${GRAFANA_VERSION:-13.0.1}
     profiles: [""]
     user: ":"
     ports:
