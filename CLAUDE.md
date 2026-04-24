@@ -88,6 +88,31 @@ docker compose up -d
 ### Switching a client
 Same as CDVN: `docker compose down`, edit the `EL`/`CL`/`VC`/`MEV` line in `.env`, `docker compose up -d`. For commit-boost, also update `commit-boost/config.toml`.
 
+### Use an external beacon node + execution client (skip the local EL/CL stack)
+
+When the operator already runs a BN/EL elsewhere and doesn't want Docker Compose to start its own, set both clients to the `-none` sentinel and point Charon + validator-ejector at the external endpoints:
+
+```bash
+EL=el-none
+CL=cl-none
+
+# Charon → external BN / EL
+CHARON_BEACON_NODE_ENDPOINTS=https://your-bn.example:5052
+CHARON_EXECUTION_CLIENT_RPC_ENDPOINT=https://your-el.example:8545
+
+# Lido-specific: validator-ejector has its own endpoint vars (see gotcha below)
+VE_BEACON_NODE_URL=https://your-bn.example:5052
+VE_EXECUTION_NODE_URL=https://your-el.example:8545
+```
+
+`el-none` / `cl-none` don't match any Compose profile, so nothing local gets started for those layers. The VC still runs locally and talks to Charon as usual — no VC-side changes needed.
+
+**Lido gotcha (validator-ejector):** `VE_BEACON_NODE_URL` and `VE_EXECUTION_NODE_URL` default to `http://${CL}:5052` and `http://${EL}:8545` in the env samples. If `CL`/`EL` are set to `cl-none`/`el-none` and these two vars aren't overridden, they resolve to `http://cl-none:5052` / `http://el-none:8545` — hostnames that don't exist — and validator-ejector fails to start. CDVN doesn't have this trap; it's specific to this repo. (The defaults could be reworked so this isn't needed — tracked as a future fix, leaving as-is for now.)
+
+**Auth to hosted providers:** Charon supports optional HTTP headers on BN requests via `CHARON_BEACON_NODE_HEADERS` (see the env sample). Use it to pass API keys when the external BN requires auth. The env sample warns the headers are sent to primary and fallback endpoints alike, so only wire in BNs you trust.
+
+**Mixed cases** (local CL + external EL, or vice versa) aren't covered explicitly — same pattern, but only set the one `-none` sentinel and only override the endpoint var(s) for the external side. Don't forget the matching `VE_*` override.
+
 ## Monitoring & alerts
 
 Same stack as CDVN: Prometheus + Grafana + Loki + Alloy. Remote-write and Loki push target Obol's hosted monitoring; Discord alerts via `ALERT_DISCORD_IDS`. See the `obol-monitoring` skill for deep diagnostics.
