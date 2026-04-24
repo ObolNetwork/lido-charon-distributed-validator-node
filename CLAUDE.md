@@ -113,6 +113,69 @@ VE_EXECUTION_NODE_URL=https://your-el.example:8545
 
 **Mixed cases** (local CL + external EL, or vice versa) aren't covered explicitly — same pattern, but only set the one `-none` sentinel and only override the endpoint var(s) for the external side. Don't forget the matching `VE_*` override.
 
+### Run two DV stacks on one host, sharing the BN/EL from one of them
+
+Common ops pattern: stack A runs a full EL+CL+Charon+VC+validator-ejector. Stack B runs only Charon+VC+validator-ejector (with `EL=el-none`/`CL=cl-none`) and reuses stack A's BN/EL to avoid running two sync'd clients on the same box. Each stack is **its own DV cluster** — separate `.charon/` from a separate DKG, separate `VE_OPERATOR_ID`, separate validator-ejector instance. They just happen to share client infrastructure.
+
+Goal: stack B's Charon reaches stack A's `lighthouse` / `nethermind` (or whichever clients) by service name, with no extra host-port publishing. Achieved by attaching stack B's containers to stack A's Docker network as a secondary network, while keeping stack B's own `dvnode` network for internal comms (VC ↔ Charon ↔ validator-ejector).
+
+**Stack A** — no structural changes. Just pin the Compose project name so the network name is predictable:
+
+```bash
+# stack-a/.env
+COMPOSE_PROJECT_NAME=stack-a       # → network becomes "stack-a_dvnode"
+```
+
+Start stack A first so the network exists before stack B comes up.
+
+**Stack B** — set `EL=el-none`, `CL=cl-none`, override endpoint vars to stack A's service names, and change the Charon P2P host port so it doesn't clash with stack A's 3610:
+
+```bash
+# stack-b/.env
+COMPOSE_PROJECT_NAME=stack-b
+EL=el-none
+CL=cl-none
+CHARON_BEACON_NODE_ENDPOINTS=http://lighthouse:5052       # service name on stack A's network
+CHARON_EXECUTION_CLIENT_RPC_ENDPOINT=http://nethermind:8545
+VE_BEACON_NODE_URL=http://lighthouse:5052
+VE_EXECUTION_NODE_URL=http://nethermind:8545
+CHARON_PORT_P2P_TCP=3611                                   # must differ from stack A's 3610
+```
+
+Add a `docker-compose.override.yml` in stack B that attaches Charon + validator-ejector to stack A's network as a secondary:
+
+```yaml
+# stack-b/docker-compose.override.yml
+services:
+  charon:
+    networks:
+      - dvnode
+      - stack-a
+  validator-ejector:
+    networks:
+      - dvnode
+      - stack-a
+
+networks:
+  stack-a:
+    external: true
+    name: stack-a_dvnode    # must match stack A's <COMPOSE_PROJECT_NAME>_dvnode
+```
+
+**Why a secondary network rather than `external: true` on `dvnode` itself:** if both stacks share one network as `dvnode`, the service aliases `charon`, `validator-ejector`, and the VC name collide — Docker's embedded DNS will return IPs from either stack for those names, and stack B's VC could end up talking to stack A's Charon. Keeping each stack's own `dvnode` private, and only joining a shared secondary network for BN/EL access, avoids that. Adjust VCs similarly if you ever need them to reach across (normally you don't — the VC talks to Charon only, on the private network).
+
+**Port conflicts to watch on the host:**
+- `CHARON_PORT_P2P_TCP` (3610 default) — must differ per stack.
+- `MONITORING_PORT_GRAFANA` (3000), `MONITORING_PORT_LOKI`, any other published monitoring ports — only relevant if stack B runs its own monitoring. Usually skip monitoring on stack B and let stack A's Prometheus scrape stack B's Charon over the shared network.
+- Charon's validator API (3600) and metrics (3620) are **not** published to the host by default — network-internal only — so they don't collide.
+
+**Validator-ejector gotcha still applies:** the `VE_*` overrides above are required, for the same reason as the external-BN section above.
+
+**Prerequisites:**
+- Same Docker host.
+- Same Docker engine version high enough to support secondary networks on a service (any recent Compose v2 is fine).
+- Stack A up before stack B — otherwise stack B's `external: true` lookup fails.
+
 ## Monitoring & alerts
 
 Same stack as CDVN: Prometheus + Grafana + Loki + Alloy. Remote-write and Loki push target Obol's hosted monitoring; Discord alerts via `ALERT_DISCORD_IDS`. See the `obol-monitoring` skill for deep diagnostics.
