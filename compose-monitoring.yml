@@ -22,7 +22,7 @@ services:
 
   grafana:
     profiles: [monitoring-visualization]
-    image: grafana/grafana:${GRAFANA_VERSION:-12.4.3}
+    image: grafana/grafana:${GRAFANA_VERSION:-13.0.1}
     user: ":"
     ports:
       - ${MONITORING_IP_GRAFANA:-0.0.0.0}:${MONITORING_PORT_GRAFANA:-3000}:3000
