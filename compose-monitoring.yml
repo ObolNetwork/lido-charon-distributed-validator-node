@@ -5,7 +5,7 @@
 services:
   prometheus:
     profiles: [monitoring-metrics]
-    image: prom/prometheus:${PROMETHEUS_VERSION:-v3.10.0}
+    image: prom/prometheus:${PROMETHEUS_VERSION:-v3.11.2}
     user: ":"
     networks: [dvnode]
     environment:
@@ -37,7 +37,7 @@ services:
 
   loki:
     profiles: [monitoring-log-aggregator]
-    image: grafana/loki:${LOKI_VERSION:-3.6.7}
+    image: grafana/loki:${LOKI_VERSION:-3.7.1}
     user: ":"
     networks: [dvnode]
     command: -config.file=/etc/loki/loki.yml
@@ -48,7 +48,7 @@ services:
 
   alloy:
     profiles: [monitoring-log-collector]
-    image: grafana/alloy:${ALLOY_VERSION:-v1.14.0}
+    image: grafana/alloy:${ALLOY_VERSION:-v1.16.0}
     environment:
       CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES:-}
       CLUSTER_NAME: ${CLUSTER_NAME:-}
