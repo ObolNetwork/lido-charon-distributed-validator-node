@@ -15,24 +15,16 @@
   "templating": {
     "list": [
       {
-        "allValue": "all",
-        "current": {
-          "text": [
-            "hoodi"
-          ],
-          "value": [
-            "hoodi"
-          ]
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
         },
         "definition": "label_values(app_peer_name,cluster_network)",
         "description": "",
-        "includeAll": true,
+        "includeAll": false,
         "label": "Cluster Network",
-        "multi": true,
+        "multi": false,
         "name": "cluster_network",
         "options": [],
         "query": {
@@ -46,10 +38,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "text": "test",
-          "value": "test"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
@@ -64,17 +53,14 @@
           "query": "label_values(app_peer_name{cluster_network=~\"$cluster_network\"},cluster_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {
-          "text": "24716d9",
-          "value": "24716d9"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
@@ -89,17 +75,14 @@
           "query": "label_values(app_peer_name{cluster_name=\"$cluster_name\"}, cluster_hash)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {
-          "text": "colorful-food",
-          "value": "colorful-food"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
@@ -114,17 +97,14 @@
           "query": "label_values(app_peer_name{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\"}, cluster_peer)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {
-          "text": "charon",
-          "value": "charon"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
@@ -140,7 +120,7 @@
           "query": "label_values(app_peer_name{cluster_name=\"$cluster_name\",cluster_hash=\"$cluster_hash\",cluster_peer=\"$cluster_peer\"},job)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "regexApplyTo": "value",
         "sort": 1,
@@ -251,6 +231,60 @@
         "query": "attester,prepare_aggregator,aggregator,sync_message,prepare_sync_contribution,sync_contribution,proposer,randao,exit,builder_proposer,builder_registration,info_sync",
         "type": "custom",
         "valuesFormat": "csv"
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(mev_boost_relay_status_code_total{job=\"mev-boost\"}, relay)",
+        "includeAll": true,
+        "multi": true,
+        "label": "Relay",
+        "name": "relay",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(mev_boost_relay_status_code_total{job=\"mev-boost\"}, relay)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "regexApplyTo": "value",
+        "sort": 1,
+        "type": "query",
+        "hide": 2
+      },
+      {
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(cb_pbs_relay_status_code_total{job=\"commit-boost\"}, relay_id)",
+        "includeAll": true,
+        "multi": true,
+        "label": "Relay Display",
+        "name": "relay_display",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(cb_pbs_relay_status_code_total{job=\"commit-boost\"}, relay_id)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "/(?:https?:\\/\\/[^@]+@)?(.+)/",
+        "regexApplyTo": "value",
+        "sort": 1,
+        "type": "query",
+        "hide": 2
       }
     ]
   },
@@ -4588,6 +4622,584 @@
       ],
       "title": "Connected Relays",
       "type": "state-timeline"
+    },
+    {
+      "id": 3001,
+      "type": "row",
+      "title": "MEV",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 111
+      },
+      "panels": []
+    },
+    {
+      "id": 3010,
+      "type": "stat",
+      "title": "MEV-Boost Status",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 112
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "DOWN"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "UP"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "text",
+                  "index": 2,
+                  "text": "N/A"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max(up{job=~\"mev-boost|commit-boost\"})",
+          "instant": true,
+          "range": false,
+          "legendFormat": "MEV-Boost"
+        }
+      ]
+    },
+    {
+      "id": 3013,
+      "type": "stat",
+      "title": "Winning Bids",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 112
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "textMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(increase(mev_boost_winning_bid_value_count{job=\"mev-boost\"}[$__range])) or vector(0)",
+          "instant": true,
+          "range": false,
+          "legendFormat": "bids"
+        }
+      ]
+    },
+    {
+      "id": 3015,
+      "type": "stat",
+      "title": "$relay_display",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 116
+      },
+      "repeat": "relay_display",
+      "repeatDirection": "v",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "DOWN",
+                  "color": "red",
+                  "index": 1
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "UP",
+                  "color": "green",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A",
+                  "color": "text",
+                  "index": 2
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        }
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "textMode": "value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "clamp_max(sum by (relay) (mev_boost_relay_status_code_total{http_status_code=\"200\", relay=~\".*$relay_display\", job=\"mev-boost\"}), 1) or clamp_max(sum by (relay) (mev_boost_relay_status_code_total{relay=~\".*$relay_display\", job=\"mev-boost\"}), 0) or clamp_max(sum by (relay_id) (cb_pbs_relay_status_code_total{http_status_code=\"200\", relay_id=~\".*$relay_display\", job=\"commit-boost\"}), 1) or clamp_max(sum by (relay_id) (cb_pbs_relay_status_code_total{relay_id=~\".*$relay_display\", job=\"commit-boost\"}), 0)",
+          "instant": true,
+          "range": false,
+          "legendFormat": "$relay_display"
+        }
+      ]
+    },
+    {
+      "id": 3016,
+      "type": "timeseries",
+      "title": "Avg Request Latency: $relay_display",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 16,
+        "x": 3,
+        "y": 116
+      },
+      "repeat": "relay_display",
+      "repeatDirection": "v",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "maxHeight": 600,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "rate(mev_boost_relay_latency_sum{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=\"/eth/v1/builder/status\"}[$__rate_interval]) / rate(mev_boost_relay_latency_count{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=\"/eth/v1/builder/status\"}[$__rate_interval]) or (rate(cb_pbs_relay_latency_sum{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"status\"}[$__rate_interval]) / rate(cb_pbs_relay_latency_count{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"status\"}[$__rate_interval])) * 1000",
+          "range": true,
+          "legendFormat": "status"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "rate(mev_boost_relay_latency_sum{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=\"/eth/v1/builder/validators\"}[$__rate_interval]) / rate(mev_boost_relay_latency_count{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=\"/eth/v1/builder/validators\"}[$__rate_interval]) or (rate(cb_pbs_relay_latency_sum{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"register_validators\"}[$__rate_interval]) / rate(cb_pbs_relay_latency_count{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"register_validators\"}[$__rate_interval])) * 1000",
+          "range": true,
+          "legendFormat": "register_validators"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "rate(mev_boost_relay_latency_sum{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=~\"/eth/v1/builder/header/.*\"}[$__rate_interval]) / rate(mev_boost_relay_latency_count{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=~\"/eth/v1/builder/header/.*\"}[$__rate_interval]) or (rate(cb_pbs_relay_latency_sum{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"get_header\"}[$__rate_interval]) / rate(cb_pbs_relay_latency_count{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=\"get_header\"}[$__rate_interval])) * 1000",
+          "range": true,
+          "legendFormat": "new_header"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "sum(rate(mev_boost_relay_latency_sum{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=~\".*/blinded_blocks\"}[$__rate_interval])) / sum(rate(mev_boost_relay_latency_count{job=\"mev-boost\", relay=~\".*$relay_display\", endpoint=~\".*/blinded_blocks\"}[$__rate_interval])) or (sum(rate(cb_pbs_relay_latency_sum{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=~\"submit_blinded_block.*\"}[$__rate_interval])) / sum(rate(cb_pbs_relay_latency_count{job=\"commit-boost\", relay_id=~\".*$relay_display\", endpoint=~\"submit_blinded_block.*\"}[$__rate_interval]))) * 1000",
+          "range": true,
+          "legendFormat": "submit_block"
+        }
+      ]
+    },
+    {
+      "id": 3017,
+      "type": "table",
+      "title": "Non-200/202: $relay_display",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 5,
+        "x": 19,
+        "y": 116
+      },
+      "repeat": "relay_display",
+      "repeatDirection": "v",
+      "noValue": "All OK",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "endpoint"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "request"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "endpoint"
+              },
+              {
+                "id": "custom.width",
+                "value": 155
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "http_status_code"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "code"
+              },
+              {
+                "id": "custom.width",
+                "value": 55
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "yellow",
+                      "value": 0
+                    },
+                    {
+                      "color": "red",
+                      "value": 400
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "count"
+              },
+              {
+                "id": "custom.width",
+                "value": 60
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        },
+        "frameIndex": 0,
+        "sortBy": [
+          {
+            "displayName": "count",
+            "desc": true
+          }
+        ]
+      },
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "targetField": "http_status_code",
+                "destinationType": "number"
+              }
+            ]
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "label_replace(label_replace(label_replace(label_replace(\n  sum by (endpoint, http_status_code) (increase(mev_boost_relay_status_code_total{job=\"mev-boost\", relay=~\".*$relay_display\", http_status_code!=\"200\", http_status_code!=\"202\"}[$__range])) > 0\n, \"request\", \"status\", \"endpoint\", \".*/status\"), \"request\", \"register_validators\", \"endpoint\", \".*/validators\"), \"request\", \"new_header\", \"endpoint\", \".*/header/.*\"), \"request\", \"submit_block\", \"endpoint\", \".*/blinded_blocks\")\nor\nlabel_replace(\n  sum by (endpoint, http_status_code) (increase(cb_pbs_relay_status_code_total{job=\"commit-boost\", relay_id=~\".*$relay_display\", http_status_code!=\"200\", http_status_code!=\"202\"}[$__range])) > 0\n, \"request\", \"$1\", \"endpoint\", \"(.*)\")",
+          "instant": true,
+          "range": false,
+          "format": "table",
+          "legendFormat": "__auto"
+        }
+      ]
     }
   ]
 }
