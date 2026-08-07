@@ -86,7 +86,7 @@ services:
   #  \___|_| |_|\__,_|_|  \___/|_| |_|
 
   charon:
-    image: obolnetwork/charon:${CHARON_VERSION:-v1.10.3}
+    image: obolnetwork/charon:${CHARON_VERSION:-56d1f22} # v1.10.3 + libp2p logger routing fix, for p2p connectivity debugging.
     environment:
       - CHARON_BEACON_NODE_ENDPOINTS=${CHARON_BEACON_NODE_ENDPOINTS:-http://lighthouse:5052}
       - CHARON_BEACON_NODE_HEADERS=${CHARON_BEACON_NODE_HEADERS:-}
@@ -97,6 +97,7 @@ services:
       - CHARON_LOG_FORMAT=${CHARON_LOG_FORMAT:-console}
       - CHARON_P2P_RELAYS=${CHARON_P2P_RELAYS:-https://0.relay.obol.tech,https://1.relay.obol.tech/,https://2.relay.obol.dev/,https://3.relay.obol.dev/}
       - CHARON_P2P_EXTERNAL_HOSTNAME=${CHARON_P2P_EXTERNAL_HOSTNAME:-} # Empty default required to avoid warnings.
+      - CHARON_P2P_EXTERNAL_IP=${CHARON_P2P_EXTERNAL_IP:-} # Advertise a public IP for direct p2p connections.
       - CHARON_P2P_TCP_ADDRESS=0.0.0.0:${CHARON_PORT_P2P_TCP:-3610}
       - CHARON_VALIDATOR_API_ADDRESS=0.0.0.0:3600
       - CHARON_MONITORING_ADDRESS=0.0.0.0:3620
@@ -110,6 +111,7 @@ services:
       - CHARON_OTLP_SERVICE_NAME=${CHARON_OTLP_SERVICE_NAME:-charon}
       - CHARON_OTLP_HEADERS=${CHARON_OTLP_HEADERS:-}
       - CHARON_PRIVATE_KEY_FILE_LOCK=${CHARON_PRIVATE_KEY_FILE_LOCK:-false}
+      - GOLOG_LOG_LEVEL=observedaddrs=debug,net/identify=debug,autonat=debug # Go-libp2p address discovery and dial debug logs, for peer connectivity testing.
     ports:
       - ${CHARON_PORT_P2P_TCP:-3610}:${CHARON_PORT_P2P_TCP:-3610}/tcp # P2P TCP libp2p
     networks: [dvnode]
