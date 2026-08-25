@@ -46,7 +46,7 @@ services:
 
   cl-lighthouse:
     profiles: [cl-lighthouse]
-    image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-v8.2.1}
+    image: sigp/lighthouse:${LIGHTHOUSE_VERSION:-v8.2.2}
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LIGHTHOUSE_ALLOY_MONITORED:-true}"
@@ -84,7 +84,7 @@ services:
 
   cl-teku:
     profiles: [cl-teku]
-    image: consensys/teku:${VC_VERSION:-26.7.1}
+    image: consensys/teku:${VC_VERSION:-26.8.0}
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_TEKU_ALLOY_MONITORED:-true}"
@@ -118,7 +118,7 @@ services:
 
   cl-lodestar:
     profiles: [cl-lodestar]
-    image: chainsafe/lodestar:${VC_VERSION:-v1.45.0}
+    image: chainsafe/lodestar:${VC_VERSION:-v1.46.0}
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LODESTAR_ALLOY_MONITORED:-true}"
