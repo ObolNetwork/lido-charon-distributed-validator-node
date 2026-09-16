@@ -17,3 +17,6 @@ teku/validator/
 teku/logs/
 commit-boost/config.toml
 prometheus/prometheus.yml
+
+# Rendered at alloy container start from config.alloy.example; may contain credentials.
+alloy/config.alloy
