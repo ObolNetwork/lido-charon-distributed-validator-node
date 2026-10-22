@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
 
   node-exporter:
-    image: bitnamilegacy/node-exporter:${NODE_EXPORTER_VERSION:-1.9.1}
+    image: prom/node-exporter:${NODE_EXPORTER_VERSION:-v1.12.1}
 
   tempo:
     image: grafana/tempo:${TEMPO_VERSION:-2.10.10}
