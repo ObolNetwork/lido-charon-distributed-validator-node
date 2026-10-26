@@ -185,7 +185,7 @@ services:
     image: prom/prometheus:${PROMETHEUS_VERSION:-v3.15.1}
     profiles: [""]
     user: ":"
-    networks: [dvnode]
+    networks: [dvnode, monitoring]
     environment:
       PROM_REMOTE_WRITE_TOKEN: ${PROM_REMOTE_WRITE_TOKEN:-}
       SERVICE_OWNER: ${SERVICE_OWNER:-}
@@ -201,23 +201,25 @@ services:
   grafana:
     image: grafana/grafana:${GRAFANA_VERSION:-13.2.4}
     profiles: [""]
-    user: ":"
     ports:
-      - ${MONITORING_IP_GRAFANA:-0.0.0.0}:${MONITORING_PORT_GRAFANA:-3000}:3000
-    networks: [dvnode]
+      - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000
+    networks: [monitoring]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
     volumes:
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/datasource.yml
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
       - ./grafana/dashboards:/etc/dashboards
-      - ./data/grafana:/var/lib/grafana
+      # A named volume lets Grafana run as its own non-root user. Nothing in it needs keeping: dashboards and datasources are provisioned.
+      - grafana-data:/var/lib/grafana
     restart: unless-stopped
 
   loki:
     image: grafana/loki:${LOKI_VERSION:-3.7.9}
     profiles: [""]
     user: ":"
-    networks: [dvnode]
+    networks: [dvnode, monitoring]
     command: -config.file=/etc/loki/loki.yml
     volumes:
       - ./loki/loki.yml:/etc/loki/loki.yml
@@ -280,3 +282,8 @@ services:
 
 networks:
   dvnode:
+  # Grafana only joins this network, so it can reach the monitoring backends but not charon, the clients or the ejector.
+  monitoring:
+
+volumes:
+  grafana-data:
