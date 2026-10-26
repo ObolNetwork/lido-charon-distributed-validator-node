@@ -7,7 +7,7 @@ services:
     profiles: [monitoring-metrics]
     image: prom/prometheus:${PROMETHEUS_VERSION:-v3.15.1}
     user: ":"
-    networks: [dvnode]
+    networks: [dvnode, monitoring]
     environment:
       PROM_REMOTE_WRITE_TOKEN: ${PROM_REMOTE_WRITE_TOKEN:-}
       SERVICE_OWNER: ${SERVICE_OWNER:-}
@@ -23,23 +23,24 @@ services:
   grafana:
     profiles: [monitoring-visualization]
     image: grafana/grafana:${GRAFANA_VERSION:-13.2.4}
-    user: ":"
     ports:
-      - ${MONITORING_IP_GRAFANA:-0.0.0.0}:${MONITORING_PORT_GRAFANA:-3000}:3000
-    networks: [dvnode]
+      - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000
+    networks: [monitoring]
+    # security_opt and cap_drop are set in docker-compose.yml: Compose concatenates list fields across files.
     volumes:
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/datasource.yml
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
       - ./grafana/dashboards:/etc/dashboards
-      - ./data/grafana:/var/lib/grafana
+      # A named volume lets Grafana run as its own non-root user. Nothing in it needs keeping: dashboards and datasources are provisioned.
+      - grafana-data:/var/lib/grafana
     restart: unless-stopped
 
   loki:
     profiles: [monitoring-log-aggregator]
     image: grafana/loki:${LOKI_VERSION:-3.7.9}
     user: ":"
-    networks: [dvnode]
+    networks: [dvnode, monitoring]
     command: -config.file=/etc/loki/loki.yml
     volumes:
       - ./loki/loki.yml:/etc/loki/loki.yml
@@ -55,8 +56,8 @@ services:
       CLUSTER_PEER: ${CLUSTER_PEER:-}
     volumes:
       - ./alloy:/etc/alloy
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks: [dvnode]
+    networks: [dvnode, docker-api]
+    depends_on: [docker-socket-proxy]
     entrypoint: /etc/alloy/run.sh
     command:
       [
@@ -67,5 +68,26 @@ services:
       ]
     restart: unless-stopped
 
+  # Gives Alloy read-only access to container metadata and logs instead of the full Docker API.
+  docker-socket-proxy:
+    profiles: [monitoring-log-collector]
+    image: tecnativa/docker-socket-proxy:${DOCKER_SOCKET_PROXY_VERSION:-v0.5.0}
+    environment:
+      CONTAINERS: 1
+      # Alloy's container discovery also lists networks.
+      NETWORKS: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks: [docker-api]
+    restart: unless-stopped
+
 networks:
   dvnode:
+  # Grafana only joins this network, so it can reach the monitoring backends but not charon, the clients or the ejector.
+  monitoring:
+  # Only Alloy and the Docker socket proxy join this network, and it has no external access.
+  docker-api:
+    internal: true
+
+volumes:
+  grafana-data:
