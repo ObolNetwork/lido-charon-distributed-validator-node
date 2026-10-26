@@ -26,8 +26,7 @@ services:
     ports:
       - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000
     networks: [monitoring]
-    security_opt: [no-new-privileges:true]
-    cap_drop: [ALL]
+    # security_opt and cap_drop are set in docker-compose.yml: Compose concatenates list fields across files.
     volumes:
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/datasource.yml
