@@ -264,12 +264,13 @@ services:
   # |_|_|\__,_|\___/       \__,_| \_/       \___/_/\_\_|\__|
 
   lido-dv-exit:
-    image: obolnetwork/lido-dv-exit:${LIDO_DV_EXIT_VERSION:-v0.6.0}
+    image: obolnetwork/lido-dv-exit:${LIDO_DV_EXIT_VERSION:-v0.6.1}
     user: ":"
     networks: [dvnode]
     volumes:
       - ./validator-ejector:/exitmessages
-      - .charon:/charon
+      # lido-dv-exit only reads the cluster lock and its key.
+      - .charon:/charon:ro
     labels:
       - "alloy-monitored=${DV_EXIT_ALLOY_MONITORED:-true}"
     environment:
