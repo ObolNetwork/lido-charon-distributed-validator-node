@@ -11,6 +11,8 @@ cluster-lock.json
 data/
 .idea
 .charon
+# Pre-signed validator exits written by lido-dv-exit for the validator ejector
+validator-ejector/
 # Teku directory for slashing protection files
 teku/validator/
 # Teku directory for storing logs
