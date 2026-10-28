@@ -28,10 +28,10 @@ services:
     networks: [monitoring]
     # security_opt and cap_drop are set in docker-compose.yml: Compose concatenates list fields across files.
     volumes:
-      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
-      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/datasource.yml
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/datasource.yml:ro
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-      - ./grafana/dashboards:/etc/dashboards
+      - ./grafana/dashboards:/etc/dashboards:ro
       # A named volume lets Grafana run as its own non-root user. Nothing in it needs keeping: dashboards and datasources are provisioned.
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
