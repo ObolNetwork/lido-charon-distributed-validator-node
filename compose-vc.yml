@@ -99,11 +99,11 @@ services:
 
   vc-teku:
     profiles: [vc-teku]
-    image: "teku-validator-client:${VC_TEKU_VERSION:-26.10.2}"
+    image: "teku-validator-client:${VC_TEKU_VERSION:-26.10.3}"
     build:
       context: teku
       args:
-        VERSION: ${VC_TEKU_VERSION:-26.10.2}
+        VERSION: ${VC_TEKU_VERSION:-26.10.3}
     depends_on: [charon]
     networks: [dvnode]
     entrypoint: /opt/teku/run.sh
