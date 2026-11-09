@@ -90,7 +90,7 @@ services:
 
   cl-teku:
     profiles: [cl-teku]
-    image: consensys/teku:${CL_TEKU_VERSION:-${VC_VERSION:-26.10.2}}
+    image: consensys/teku:${CL_TEKU_VERSION:-${VC_VERSION:-26.10.3}}
     depends_on:
       jwt-init:
         condition: service_completed_successfully

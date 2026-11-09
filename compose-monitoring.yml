@@ -22,7 +22,7 @@ services:
 
   grafana:
     profiles: [monitoring-visualization]
-    image: grafana/grafana:${GRAFANA_VERSION:-13.2.4}
+    image: grafana/grafana:${GRAFANA_VERSION:-13.2.5}
     ports:
       - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000
     networks: [monitoring]
@@ -49,7 +49,7 @@ services:
 
   alloy:
     profiles: [monitoring-log-collector]
-    image: grafana/alloy:${ALLOY_VERSION:-v1.21.1}
+    image: grafana/alloy:${ALLOY_VERSION:-v1.21.3}
     environment:
       CHARON_LOKI_ADDRESSES: ${CHARON_LOKI_ADDRESSES:-}
       CLUSTER_NAME: ${CLUSTER_NAME:-}
