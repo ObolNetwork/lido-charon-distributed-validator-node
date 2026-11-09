@@ -121,6 +121,9 @@ services:
       # Charon never reads the key shares, so hide them from it. Exits are signed by lido-dv-exit.
       - type: tmpfs
         target: /opt/charon/.charon/validator_keys
+        tmpfs:
+          size: 4096 # bytes, so nothing can fill memory through it
+          mode: 0555 # root owned, so the non-root charon user can't write to it
     restart: unless-stopped
     healthcheck:
       test: wget -qO- http://localhost:3620/readyz
