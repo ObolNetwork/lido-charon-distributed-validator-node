@@ -119,6 +119,9 @@ services:
       - "alloy-monitored=${CHARON_ALLOY_MONITORED:-true}"
     volumes:
       - .charon:/opt/charon/.charon
+      # Charon never reads the key shares, so hide them from it. Exits are signed by lido-dv-exit.
+      - type: tmpfs
+        target: /opt/charon/.charon/validator_keys
     restart: unless-stopped
     healthcheck:
       test: wget -qO- http://localhost:3620/readyz
