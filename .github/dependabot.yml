@@ -1,0 +1,33 @@
+# Dependency updates. Replaces Renovate (.github/renovate.json is removed).
+# cooldown: a release must be at least 3 days old before it is proposed.
+# Dependabot does not apply the cooldown to security updates.
+version: 2
+updates:
+  - package-ecosystem: docker-compose
+    directories:
+      - /
+      - /relay
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: "images"
+    groups:
+      # One PR for every minor and patch bump; majors stay separate PRs.
+      images-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 3
+    commit-message:
+      prefix: "ci"
+    groups:
+      github-actions:
+        patterns: ["*"]
