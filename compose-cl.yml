@@ -19,8 +19,6 @@ services:
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_GRANDINE_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command:
       - --data-dir=/root/.grandine
       - --eth1-rpc-urls=http://${EL}:8551
@@ -39,7 +37,7 @@ services:
       - ${CL_PORT_P2P:-9000}:9000 # P2P TCP+UDP
     volumes:
       - ./data/cl-grandine:/root/.grandine
-      - ./jwt:/jwt:ro
+      - jwt:/jwt:ro
     networks: [dvnode]
 
   #  _ _       _     _   _
@@ -58,8 +56,6 @@ services:
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LIGHTHOUSE_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command: |
       lighthouse bn
       --network=${NETWORK}
@@ -83,7 +79,7 @@ services:
       - ${CL_PORT_P2P:-9000}:9000/udp # P2P UDP
     volumes:
       - ./data/lighthouse:/opt/app/beacon # Keep data in lighthouse and not cl-lighthouse for backwards compatibility
-      - ./jwt:/opt/jwt
+      - jwt:/opt/jwt:ro
     networks: [dvnode]
 
   #  _       _
@@ -101,8 +97,6 @@ services:
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_TEKU_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command: |
       --network=${NETWORK}
       --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL}
@@ -122,7 +116,7 @@ services:
       --p2p-peer-upper-bound=${CL_TARGET_PEERS:-100}
     volumes:
       - ./data/cl-teku:/opt/teku/data
-      - ./jwt:/jwt:ro
+      - jwt:/jwt:ro
     networks: [dvnode]
 
   #  _           _           _
@@ -140,8 +134,6 @@ services:
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_LODESTAR_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command: |
       beacon
       --network=${NETWORK}
@@ -161,7 +153,7 @@ services:
       --targetPeers=${CL_TARGET_PEERS:-200}
     volumes:
       - ./data/cl-lodestar:/opt/lodestar/data
-      - ./jwt:/jwt:ro
+      - jwt:/jwt:ro
     networks: [dvnode]
 
   #
@@ -180,8 +172,6 @@ services:
     restart: unless-stopped
     labels:
       - "alloy-monitored=${CL_PRYSM_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command:
       - --accept-terms-of-use
       - --${NETWORK}
@@ -203,5 +193,5 @@ services:
       - ${CL_PORT_P2P:-9000}:12000/udp # P2P UDP
     volumes:
       - ./data/cl-prysm:/data
-      - ./jwt:/jwt:ro
+      - jwt:/jwt:ro
     networks: [dvnode]

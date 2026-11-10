@@ -19,5 +19,5 @@ teku/validator/
 teku/logs/
 commit-boost/config.toml
 prometheus/prometheus.yml
-# Engine API secret, generated per deployment by the jwt-init service in docker-compose.yml
+# Your own Engine API secret, if you provide one. The jwt-init service in docker-compose.yml generates one otherwise.
 jwt/jwt.hex*
