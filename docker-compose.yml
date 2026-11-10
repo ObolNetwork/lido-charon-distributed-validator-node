@@ -59,7 +59,7 @@ services:
   # |_| |_|\___|\__|_| |_|\___|_|  |_| |_| |_|_|_| |_|\__,_|
 
   nethermind:
-    image: nethermind/nethermind:${NETHERMIND_VERSION:-2.2.0}
+    image: nethermind/nethermind:${NETHERMIND_VERSION:-2.2.2}
     depends_on:
       jwt-init:
         condition: service_completed_successfully
@@ -173,6 +173,13 @@ services:
       - "alloy-monitored=${CHARON_ALLOY_MONITORED:-true}"
     volumes:
       - .charon:/opt/charon/.charon
+      # Charon never reads the key shares, so hide them from it. Exits are signed by lido-dv-exit.
+      - type: tmpfs
+        target: /opt/charon/.charon/validator_keys
+        read_only: true
+        tmpfs:
+          size: 4096 # bytes, so nothing can fill memory through it
+          mode: 0555 # root owned, so the non-root charon user can't write to it
     restart: unless-stopped
     healthcheck:
       test: wget -qO- http://localhost:3620/readyz
@@ -184,7 +191,7 @@ services:
   # |_|\___/ \__,_|\___||___/\__\__,_|_|
 
   lodestar:
-    image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.50.0}
+    image: chainsafe/lodestar:${LODESTAR_VERSION:-v1.50.1}
     profiles: [""]
     depends_on: [charon]
     entrypoint: /opt/lodestar/run.sh
@@ -254,7 +261,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:${GRAFANA_VERSION:-13.2.4}
+    image: grafana/grafana:${GRAFANA_VERSION:-13.2.5}
     profiles: [""]
     ports:
       - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000

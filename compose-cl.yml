@@ -90,7 +90,7 @@ services:
 
   cl-teku:
     profiles: [cl-teku]
-    image: consensys/teku:${CL_TEKU_VERSION:-${VC_VERSION:-26.10.1}}
+    image: consensys/teku:${CL_TEKU_VERSION:-${VC_VERSION:-26.10.3}}
     depends_on:
       jwt-init:
         condition: service_completed_successfully
@@ -127,7 +127,7 @@ services:
 
   cl-lodestar:
     profiles: [cl-lodestar]
-    image: chainsafe/lodestar:${CL_LODESTAR_VERSION:-${VC_VERSION:-v1.50.0}}
+    image: chainsafe/lodestar:${CL_LODESTAR_VERSION:-${VC_VERSION:-v1.50.1}}
     depends_on:
       jwt-init:
         condition: service_completed_successfully
@@ -165,7 +165,7 @@ services:
 
   cl-prysm:
     profiles: [cl-prysm]
-    image: prysmaticlabs/prysm-beacon-chain:${CL_PRYSM_VERSION:-v7.3.0}
+    image: prysmaticlabs/prysm-beacon-chain:${CL_PRYSM_VERSION:-v7.3.1}
     depends_on:
       jwt-init:
         condition: service_completed_successfully
