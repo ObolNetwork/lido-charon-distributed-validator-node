@@ -23,8 +23,6 @@ services:
       - ${EL_IP_ENGINE:-127.0.0.1}:${EL_PORT_ENGINE:-8551}:8551 # ENGINE-API
     labels:
       - "alloy-monitored=${EL_NETHERMIND_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command: |
       --config=${NETWORK}
       --data-dir=/nethermind/data
@@ -45,7 +43,7 @@ services:
     networks: [dvnode]
     volumes:
       - ./data/nethermind:/nethermind/data
-      - ./jwt:/root/jwt
+      - jwt:/root/jwt:ro
 
   #           _   _
   #  _ __ ___| |_| |__
@@ -67,8 +65,6 @@ services:
       - ${EL_IP_ENGINE:-127.0.0.1}:${EL_PORT_ENGINE:-8551}:8551 # ENGINE-API
     labels:
       - "alloy-monitored=${EL_RETH_ALLOY_MONITORED:-true}"
-      # Changing this label recreates the client, so the EL and CL load jwt/jwt.hex together.
-      - "jwt-secret=per-deployment"
     command: |
       node
       --full
@@ -84,4 +80,4 @@ services:
     networks: [dvnode]
     volumes:
       - ./data/reth:/reth/data
-      - ./jwt:/root/jwt
+      - jwt:/root/jwt:ro
