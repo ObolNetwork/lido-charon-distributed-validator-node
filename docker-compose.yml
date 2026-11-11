@@ -207,7 +207,7 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:${GRAFANA_VERSION:-13.2.5}
+    image: grafana/grafana:${GRAFANA_VERSION:-13.2.6}
     profiles: [""]
     ports:
       - ${MONITORING_IP_GRAFANA:-127.0.0.1}:${MONITORING_PORT_GRAFANA:-3000}:3000
