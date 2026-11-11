@@ -18,6 +18,8 @@ teku/validator/
 # Teku directory for storing logs
 teku/logs/
 commit-boost/config.toml
+# Configs that older releases rendered here; they are now rendered inside the containers.
 prometheus/prometheus.yml
+alloy/config.alloy
 # Your own Engine API secret, if you provide one. The jwt-init service in docker-compose.yml generates one otherwise.
 jwt/jwt.hex*
