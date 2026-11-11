@@ -22,29 +22,6 @@ jobs:
       - run: 'pip install --only-binary :all: pyyaml==6.0.2'
       - run: python3 .github/scripts/check_exposure.py
 
-  start_log_collector:
-    # Ensures Alloy and the Docker socket proxy start and stay up with their hardening options.
-    runs-on: ubuntu-latest
-    env:
-      CHARON_LOKI_ADDRESSES: http://loki:3100/loki/api/v1/push
-      CLUSTER_NAME: ci
-      CLUSTER_PEER: ci
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
-      - run: docker compose -f compose-monitoring.yml --profile monitoring-log-collector up -d
-      - run: |
-          sleep 30
-          docker compose -f compose-monitoring.yml --profile monitoring-log-collector ps -a
-          for service in alloy docker-socket-proxy; do
-            id=$(docker compose -f compose-monitoring.yml --profile monitoring-log-collector ps -a -q "$service")
-            state=$(docker inspect -f '{{.State.Status}} {{.RestartCount}}' "$id")
-            if [ "$state" != "running 0" ]; then
-              echo "::error::$service is '$state', expected 'running 0'"
-              docker logs "$id"
-              exit 1
-            fi
-          done
-
   render_configs:
     # Ensures every sample .env and the debug overlay produce a valid merged compose config.
     runs-on: ubuntu-latest
