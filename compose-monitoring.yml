@@ -15,7 +15,7 @@ services:
       CLUSTER_NAME: ${CLUSTER_NAME:-}
       CLUSTER_PEER: ${CLUSTER_PEER:-}
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./prometheus:/etc/prometheus:ro
       - ./data/prometheus:/prometheus
     entrypoint: /etc/prometheus/run.sh
     restart: unless-stopped
@@ -43,7 +43,7 @@ services:
     networks: [dvnode, monitoring]
     command: -config.file=/etc/loki/loki.yml
     volumes:
-      - ./loki/loki.yml:/etc/loki/loki.yml
+      - ./loki/loki.yml:/etc/loki/loki.yml:ro
       - ./data/loki:/loki
     restart: unless-stopped
 
@@ -55,7 +55,7 @@ services:
       CLUSTER_NAME: ${CLUSTER_NAME:-}
       CLUSTER_PEER: ${CLUSTER_PEER:-}
     volumes:
-      - ./alloy:/etc/alloy
+      - ./alloy:/etc/alloy:ro
     networks: [dvnode, docker-api]
     depends_on: [docker-socket-proxy]
     entrypoint: /etc/alloy/run.sh
@@ -63,7 +63,7 @@ services:
       [
         "/bin/alloy",
         "run",
-        "/etc/alloy/config.alloy",
+        "/tmp/config.alloy",
         "--storage.path=/var/lib/alloy/data",
       ]
     restart: unless-stopped
