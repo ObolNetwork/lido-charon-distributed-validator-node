@@ -149,7 +149,7 @@ services:
     labels:
       - "alloy-monitored=${LODESTAR_ALLOY_MONITORED:-true}"
     volumes:
-      - ./lodestar/run.sh:/opt/lodestar/run.sh
+      - ./lodestar/run.sh:/opt/lodestar/run.sh:ro
       - .charon/validator_keys:/home/charon/validator_keys
       - ./data/lodestar:/opt/data
     restart: unless-stopped
@@ -193,14 +193,15 @@ services:
     profiles: [""]
     user: ":"
     networks: [dvnode, monitoring]
+    # The token is a secret file, not an environment variable, so inspecting the container does not reveal it.
+    secrets: [prom_remote_write_token]
     environment:
-      PROM_REMOTE_WRITE_TOKEN: ${PROM_REMOTE_WRITE_TOKEN:-}
       SERVICE_OWNER: ${SERVICE_OWNER:-}
       ALERT_DISCORD_IDS: "${ALERT_DISCORD_IDS:-}"
       CLUSTER_NAME: ${CLUSTER_NAME:-}
       CLUSTER_PEER: ${CLUSTER_PEER:-}
     volumes:
-      - ./prometheus:/etc/prometheus
+      - ./prometheus:/etc/prometheus:ro
       - ./data/prometheus:/prometheus
     entrypoint: /etc/prometheus/run.sh
     restart: unless-stopped
@@ -229,7 +230,7 @@ services:
     networks: [dvnode, monitoring]
     command: -config.file=/etc/loki/loki.yml
     volumes:
-      - ./loki/loki.yml:/etc/loki/loki.yml
+      - ./loki/loki.yml:/etc/loki/loki.yml:ro
       - ./data/loki:/loki
     restart: unless-stopped
 
@@ -293,6 +294,10 @@ networks:
   dvnode:
   # Grafana only joins this network, so it can reach the monitoring backends but not charon, the clients or the ejector.
   monitoring:
+
+secrets:
+  prom_remote_write_token:
+    environment: PROM_REMOTE_WRITE_TOKEN
 
 volumes:
   # Holds the Engine API secret. The execution client generates it on start and the consensus client reads it.
