@@ -8,8 +8,9 @@ services:
     image: prom/prometheus:${PROMETHEUS_VERSION:-v3.15.1}
     user: ":"
     networks: [dvnode, monitoring]
+    # The token is a secret file, not an environment variable, so inspecting the container does not reveal it.
+    secrets: [prom_remote_write_token]
     environment:
-      PROM_REMOTE_WRITE_TOKEN: ${PROM_REMOTE_WRITE_TOKEN:-}
       SERVICE_OWNER: ${SERVICE_OWNER:-}
       ALERT_DISCORD_IDS: "${ALERT_DISCORD_IDS:-}"
       CLUSTER_NAME: ${CLUSTER_NAME:-}
@@ -89,6 +90,12 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./docker-socket-proxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    # Restart if the Docker socket goes away, for example after a Docker engine update: the restart mounts the new socket.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:2375/_ping || kill 1"]
+      interval: 60s
+      timeout: 10s
+      start_period: 10s
     networks: [docker-api]
     restart: unless-stopped
 
@@ -99,6 +106,10 @@ networks:
   # Only Alloy and the Docker socket proxy join this network, and it has no external access.
   docker-api:
     internal: true
+
+secrets:
+  prom_remote_write_token:
+    environment: PROM_REMOTE_WRITE_TOKEN
 
 volumes:
   alloy-data:
